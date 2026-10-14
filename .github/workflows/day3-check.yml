@@ -26,7 +26,8 @@ jobs:
           find . -name auth_helpers.py -exec grep -q "generate_token" {} \; && echo "PASS: jwt" || echo "FAIL: jwt"
           find . -name auth_helpers.py -exec grep -q "role_required" {} \; && echo "PASS: roles" || echo "FAIL: roles"
       - name: Check accessibility
-        run: "find . -name accessibility.py -exec grep -q 'accessibility' {} ; && echo 'PASS: accessibility' || echo 'FAIL: accessibility'"
+        run: "grep -q 'accessibility' utils/accessibility.py && echo 'PASS: accessibility' || echo 'FAIL: accessibility'"
+
       - name: Syntax check
         run: |
           python -m py_compile $(find . -name "*.py")
