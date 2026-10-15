@@ -26,13 +26,15 @@ jobs:
  
       - name: Build and push image
         uses: docker/build-push-action@v6
+        
         with:
-          context: ./accessevent/accessevent
-          file: ./accessevent/accessevent/Dockerfile
+          context: .
+          file: ./Dockerfile
           push: true
           tags: |
             ghcr.io/andreyneandrey/accessevent:latest
             ghcr.io/andreyneandrey/accessevent:${{ github.sha }}
+
 
 
  
