@@ -27,11 +27,14 @@ jobs:
       - name: Build and push image
         uses: docker/build-push-action@v6
         with:
-          context: .
+          with:
+          context: ./accessevent
+          file: ./accessevent/Dockerfile
           push: true
           tags: |
             ghcr.io/andreyneandrey/accessevent:latest
             ghcr.io/andreyneandrey/accessevent:${{ github.sha }}
+
  
       - name: Summary
         run: "echo 'PASS: Docker image built and published to GHCR'"
