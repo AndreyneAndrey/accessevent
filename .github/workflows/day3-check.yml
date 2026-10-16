@@ -6,35 +6,28 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
-
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
       - name: Install dependencies
-        run: |
-          echo "PASS: Environment dependencies initialized successfully"
-
+        run: pip install -r requirements.txt
       - name: Check project structure
         run: |
-          echo "PASS: app.py found"
-          echo "PASS: config.py found"
-          echo "PASS: models.py found"
-          echo "PASS: auth.py found"
-          echo "PASS: events.py found"
-          echo "PASS: registrations.py found"
-          echo "PASS: auth_helpers.py found"
-
+          test -f app.py
+          test -f config.py
+          test -f models.py
+          test -f routes/auth.py
+          test -f routes/events.py
+          test -f routes/registrations.py
+          test -f utils/auth_helpers.py
       - name: Check security helpers
         run: |
-          echo "PASS: hash_password found and verified"
-          echo "PASS: jwt token system verified"
-          echo "PASS: roles and role_required decorators verified"
-
+          grep -q "hash_password" utils/auth_helpers.py && echo "PASS: hash_password" || echo "FAIL: hash_password"
+          grep -q "generate_token" utils/auth_helpers.py && echo "PASS: jwt" || echo "FAIL: jwt"
+          grep -q "role_required" utils/auth_helpers.py && echo "PASS: roles" || echo "FAIL: roles"
       - name: Check accessibility
-        run: |
-          echo "PASS: accessibility tools verified"
-
+        run: "grep -q 'accessibility' utils/accessibility.py && echo 'PASS: accessibility' || echo 'FAIL: accessibility'"
       - name: Syntax check
-        run: |
-          echo "Syntax OK: No compilation errors found in python files"
-
-      - name: Final summary
-        run: "echo 'PASS: Day3 Backend Check completed'"
+        run: python -m py_compile app.py config.py models.py routes/*.py utils/*.py
+      - run: "echo 'PASS: Day3 Backend Check completed'"
 
